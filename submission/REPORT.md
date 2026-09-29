@@ -8,7 +8,7 @@
 - **MSSV:** 2A202602398
 - **Lớp:** K4-L3A
 - **Repository URL:** https://github.com/ItzMeVHuangg/K4-L3-DAY13-VuVietHoang-2A202602398-Monitoring-LLMOps
-- **Commit SHA cuối:** abd3aebcf7f362bc620c05cbe02feeb35772278c
+- **Commit SHA cuối:** a47b58838e6c44e2f9e28d5a4172a948dca5ca76
 - **Challenge ID:** day13-k4-l3a-monitoring-llmops-v1
 
 ## 2. Evidence index
