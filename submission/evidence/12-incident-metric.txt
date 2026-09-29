@@ -1,0 +1,5 @@
+Traffic binh thuong (latency_ms < 1000, chua bi incident/thi nghiem anh huong): n=22, avg=151ms, min=151ms, max=152ms
+Trong cua so challenge (feature=monitoring, 2026-09-29T09:24:50Z -> 09:25:04Z): n=5, avg=2652ms, min=2651ms, max=2653ms
+Ty le tang: 17.5x so voi baseline binh thuong
+
+Luu y: file data/logs.jsonl con luu lai ca cac lan chay thu incident practice va thi nghiem prompt-versioning truoc do (latency_ms >= 1000ms nhung khong thuoc cua so challenge chinh thuc), nen khong dung trung binh toan bo file lam baseline.

@@ -16,16 +16,33 @@ class ManagedPrompt:
         )
 
 
+class RecordingObservation:
+    def __init__(self, as_type: str, start_kwargs: dict) -> None:
+        self.as_type = as_type
+        self.start_kwargs = start_kwargs
+        self.update_kwargs: dict | None = None
+
+    def update(self, **kwargs) -> None:
+        self.update_kwargs = kwargs
+
+
 class RecordingLangfuseClient:
     def __init__(self) -> None:
         self.prompt = ManagedPrompt()
         self.span_updates: list[dict] = []
+        self.observations: list[RecordingObservation] = []
 
     def get_prompt(self, name: str, **kwargs):
         return self.prompt
 
     def update_current_span(self, **kwargs) -> None:
         self.span_updates.append(kwargs)
+
+    @contextmanager
+    def start_as_current_observation(self, *, as_type: str, **kwargs):
+        observation = RecordingObservation(as_type, kwargs)
+        self.observations.append(observation)
+        yield observation
 
 
 def test_agent_records_prompt_version_with_v4_observation_api(monkeypatch) -> None:
@@ -67,3 +84,17 @@ def test_agent_records_prompt_version_with_v4_observation_api(monkeypatch) -> No
     assert span_update["version"] == "3"
     assert propagated[0]["metadata"]["correlation_id"] == "req-12345678"
     assert propagated[-1]["prompt"] is client.prompt
+
+    # CP2: retrieve() and FakeLLM.generate() must each be their own child
+    # observation, with the generation carrying model, usage and cost.
+    assert [obs.as_type for obs in client.observations] == ["retriever", "generation"]
+
+    retrieval_obs = client.observations[0]
+    assert retrieval_obs.update_kwargs["output"] == ["No domain document matched. Use general fallback answer."]
+    assert retrieval_obs.update_kwargs["metadata"] == {"doc_count": 1}
+
+    generation_obs = client.observations[1]
+    assert generation_obs.start_kwargs["model"] == agent.model
+    assert generation_obs.update_kwargs["usage_details"]["input"] > 0
+    assert generation_obs.update_kwargs["usage_details"]["output"] > 0
+    assert generation_obs.update_kwargs["cost_details"]["total"] > 0

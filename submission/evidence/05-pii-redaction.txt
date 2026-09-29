@@ -1,0 +1,19 @@
+Request gửi tới /chat (chứa PII giả):
+
+POST /chat
+{
+  "user_id": "u1",
+  "session_id": "s-pii-demo",
+  "feature": "qa",
+  "message": "Email test@vinuni.edu.vn, CCCD 012345678901, the 4111111111111111, sdt 0901234567"
+}
+
+Log ghi lại trong data/logs.jsonl (correlation_id req-523134f9), PII đã được scrub:
+
+{"service": "api", "payload": {"message_preview": "Email [REDACTED_EMAIL], CCCD [REDACTED_CCCD], the [REDACTED_CREDIT_CARD], sdt [R..."}, "event": "request_received", "correlation_id": "req-523134f9", "env": "dev", "session_id": "s-pii-demo", "model": "claude-sonnet-4-5", "user_id_hash": "bb82030dbc2b", "feature": "qa", "level": "info", "ts": "2026-09-29T09:38:53.931304Z"}
+
+Đối chiếu:
+- Email gốc "test@vinuni.edu.vn" -> "[REDACTED_EMAIL]"
+- CCCD gốc "012345678901" -> "[REDACTED_CCCD]"
+- Số thẻ gốc "4111111111111111" -> "[REDACTED_CREDIT_CARD]"
+- SDT gốc "0901234567" -> bị cắt do preview giới hạn 80 ký tự, nhưng đã redact (xác nhận qua scripts/validate_logs.py: Potential PII leaks detected = 0 trên toàn bộ log)
