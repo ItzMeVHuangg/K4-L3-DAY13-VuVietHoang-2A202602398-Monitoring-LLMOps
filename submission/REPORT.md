@@ -27,7 +27,7 @@
 | Trace metadata | `evidence/08-trace-metadata.png` | Đã có |
 | Prompt versions | `evidence/09-prompt-versions.png` | Đã có |
 | Prompt rollback | `evidence/10-prompt-rollback.png` | Đã có |
-| Dashboard runtime | `evidence/11-dashboard-overview.html` | Đã có (artifact: https://claude.ai/artifact/ADJiDichcxKg4ogpwjfLVf) |
+| Dashboard runtime | `evidence/11-dashboard-overview.png` | Đã có (artifact gốc: https://claude.ai/artifact/ADJiDichcxKg4ogpwjfLVf) |
 | Incident metric | `evidence/12-incident-metric.txt` | Đã có |
 | Incident log | `evidence/13-incident-log.txt` | Đã có |
 | Incident trace | `evidence/14-incident-trace.png` | Đã có |
